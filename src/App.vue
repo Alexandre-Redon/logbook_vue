@@ -7,3 +7,7 @@ export default {
   name: 'App'
 }
 </script>
+
+<style scoped>
+@import '@/styles/app.css';
+</style>
