@@ -32,7 +32,18 @@ export const useCartStore = defineStore({
     },
     cartLength: (state) => {
       return state.cartItems.length
-    }
+    },
+    isAdded:
+      (state) =>
+      (productId: number): boolean => {
+        return state.cartItems.some((item) => item.id === productId)
+      },
+    getQuantity:
+      (state) =>
+      (productId: number): number => {
+        const item = state.cartItems.find((item) => item.id === productId)
+        return item ? item.quantity : 0
+      }
   },
   actions: {
     addToCart(item: Product) {

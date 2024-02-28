@@ -7,8 +7,10 @@ const BASE_URL = 'https://dummyjson.com'
 export async function getAllProducts() {
   try {
     const res = await axios.get(`${BASE_URL}/products?limit=100`)
+    console.log('rentré : ')
     return res.data.products
   } catch (error) {
+    console.log('rentré')
     console.error('Error fetching products:', error)
     return []
   }

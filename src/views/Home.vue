@@ -51,7 +51,6 @@
 import { createApi } from '@/utils/context/api'
 import { ref, onMounted } from 'vue'
 import background from '@/assets/background3.jpg'
-import type { Category } from '@/utils/types/category'
 import { data } from '@/utils/data/data'
 import type { Product } from '@/utils/types/products'
 
@@ -61,10 +60,7 @@ export default {
     const api = createApi()
 
     const products = ref<Product[]>([])
-    const categories = ref<Category[]>([])
-
-    console.log('products', products)
-    console.log('categories', categories)
+    const categories = ref<string[]>([])
 
     const fetchProducts = async () => {
       try {
@@ -93,7 +89,7 @@ export default {
     onMounted(async () => {
       try {
         await fetchProducts()
-        console.log('productd', products.value)
+        /* console.log('productd', products.value) */
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -102,11 +98,11 @@ export default {
     return {
       products,
       categories,
-      background,
       showMore,
       showMoreProducts,
       getCategoryImage,
-      truncateText
+      truncateText,
+      background
     }
   }
 }
