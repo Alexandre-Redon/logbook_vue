@@ -55,33 +55,53 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/utils/stores/index'
 import background from '@/assets/shop_background.jpg'
 import type { Product } from '@/utils/types/products'
 
-const cartItems = useCartStore().cartItems
-
-console.log('Initial cart items', cartItems)
+const store = useCartStore()
+let cartItems = reactive(store.cartItems)
 
 const addToCart = (item: Product): void => {
-  useCartStore().addToCart(item)
+  store.addToCart(item)
+  cartItems.filter((cartItem) => {
+    if (cartItem.id === item.id) {
+      cartItem.quantity++
+    }
+  })
 }
 
 const removeFromCart = (item: Product): void => {
-  useCartStore().removeFromCart(item)
+  store.removeFromCart(item)
+  const isItemInCart = cartItems.find((cartItem) => cartItem.id === item.id)
+
+  if (isItemInCart && isItemInCart.quantity === 1) {
+    cartItems = cartItems.filter((cartItem) => cartItem.id !== item.id)
+  } else {
+    cartItems = cartItems.map((cartItem) =>
+      cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
+    )
+  }
+  store.saveCartToLocalStorage()
 }
 
 const getCartTotal = computed(() => useCartStore().cartTotal)
 
 const clearCart = (): void => {
-  useCartStore().clearCart()
+  store.clearCart()
+  cartItems = []
 }
 
 const router = useRouter()
 
+onBeforeMount(() => {
+  useCartStore().loadCartFromLocalStorage()
+})
+
 onMounted(() => {
+  store.loadCartFromLocalStorage()
   if (cartItems.length === 0) {
     alert('Your cart is empty ! You will be redirected to the shop page.')
     router.push('/shop')

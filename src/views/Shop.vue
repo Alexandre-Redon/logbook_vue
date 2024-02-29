@@ -12,13 +12,12 @@
       </div>
     </article>
     <FilterSearch :totalProducts="products.length" />
-    <PaginatedItems :products="products" :productsPerPage="16" v-model:itemOffset="itemOffset" />
-    <!-- Add the modal here to indicate that the item has been added to the cart -->
+    <PaginatedItems />
   </div>
 </template>
 
 <script lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import FilterSearch from '@/components/FilterSearch.vue'
 import PaginatedItems from '@/components/PaginatedItem.vue'
 import { createApi } from '@/utils/context/api'
@@ -34,12 +33,15 @@ export default {
   setup() {
     const api = createApi()
 
-    const products = ref<Product[]>([])
+    const products = reactive<Product[]>([])
     const itemOffset = ref(0)
 
     const fetchProduct = async () => {
       try {
-        products.value = await api.getAllProducts()
+        var resProduct: Product[] = await api.getAllProducts()
+        resProduct.forEach((product) => {
+          products.push(product)
+        })
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -48,7 +50,6 @@ export default {
     onMounted(async () => {
       try {
         await fetchProduct()
-        console.log('productd', products.value)
       } catch (error) {
         console.error('Error fetching data:', error)
       }

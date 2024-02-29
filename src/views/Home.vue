@@ -4,8 +4,8 @@
       <div class="promo-content">
         <h2 class="promo-content-title">New Promo</h2>
         <p>
-          Le black friday est de retour ! Profitez de -50% sur tout le site avec le code promo :
-          BLACKFRIDAY N'hésitez pas à nous contacter pour plus d'informations.
+          Les soldes sont de retour ! Profitez de -50% sur tout le site avec le code promo : ALEX50
+          N'hésitez pas à nous contacter pour plus d'informations.
         </p>
         <router-link to="/shop" class="btn-promo">Buy Now</router-link>
       </div>
@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { createApi } from '@/utils/context/api'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import background from '@/assets/background3.jpg'
 import { data } from '@/utils/data/data'
 import type { Product } from '@/utils/types/products'
@@ -59,13 +59,19 @@ export default {
   setup() {
     const api = createApi()
 
-    const products = ref<Product[]>([])
-    const categories = ref<string[]>([])
+    let products = reactive<Product[]>([])
+    let categories = reactive<string[]>([])
 
     const fetchProducts = async () => {
       try {
-        products.value = await api.getAllProducts()
-        categories.value = await api.getCategories()
+        var resProduct: Product[] = await api.getAllProducts()
+        resProduct.forEach((product) => {
+          products.push(product)
+        })
+        var resCate: string[] = await api.getCategories()
+        resCate.forEach((category) => {
+          categories.push(category)
+        })
       } catch (error) {
         console.error('Error fetching data:', error)
       }

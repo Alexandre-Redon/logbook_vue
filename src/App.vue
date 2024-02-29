@@ -2,10 +2,13 @@
   <router-view />
 </template>
 
-<script lang="ts">
-export default {
-  name: 'App'
-}
+<script setup lang="ts">
+import { onBeforeMount } from 'vue'
+import { useCartStore } from './utils/stores'
+
+onBeforeMount(() => {
+  useCartStore().loadCartFromLocalStorage()
+})
 </script>
 
 <style scoped>

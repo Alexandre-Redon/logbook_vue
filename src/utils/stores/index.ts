@@ -48,7 +48,6 @@ export const useCartStore = defineStore({
   actions: {
     addToCart(item: Product) {
       const isItemInCart = this.cartItems.find((cartItem) => cartItem.id === item.id)
-
       if (isItemInCart) {
         this.cartItems = this.cartItems.map((cartItem) =>
           cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
@@ -56,6 +55,7 @@ export const useCartStore = defineStore({
       } else {
         this.cartItems = [...this.cartItems, { ...item, quantity: 1 }]
       }
+      this.saveCartToLocalStorage()
     },
     removeFromCart(item: Product) {
       const isItemInCart = this.cartItems.find((cartItem) => cartItem.id === item.id)
@@ -67,12 +67,26 @@ export const useCartStore = defineStore({
           cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
         )
       }
+      this.saveCartToLocalStorage()
     },
     clearCart() {
       this.cartItems = []
+      console.log('Cart cleared')
+      this.saveCartToLocalStorage()
     },
     setOrderData(newOrder: Order) {
       this.order = newOrder
+      this.saveCartToLocalStorage()
+    },
+    loadCartFromLocalStorage() {
+      const storedCart = localStorage.getItem('cart')
+      if (storedCart) {
+        this.cartItems = JSON.parse(storedCart)
+      }
+    },
+    saveCartToLocalStorage() {
+      localStorage.setItem('cart', JSON.stringify(this.cartItems))
+      console.log('Cart saved to local storage')
     }
   }
 })

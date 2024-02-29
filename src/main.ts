@@ -17,16 +17,18 @@ const routes = [
     children: [
       { path: '', component: Home },
       { path: '/shop', component: Shop },
-      { path: '/cart', component: Cart }
-      /*
-      { path: '/product/:id', component: ProductDetails },
       { path: '/cart', component: Cart },
-      { path: '/checkout', component: Checkout },
-      { path: '/contact', component: Contact },
-      { path: '/blog', component: Blog },
-      { path: '*', component: ErrorPage },
-      { path: '/success', component: SuccessPage },
-      { path: '/cancel', component: CancelPage } */
+      { path: '*', component: Home },
+      { path: '/product/:id', component: Home },
+      { path: '/cart', component: Cart },
+      { path: '/checkout', component: Home },
+      { path: '/contact', component: Home },
+      { path: '/blog', component: Home },
+      { path: '/success', component: Home },
+      { path: '/cancel', component: Home }
+
+      /*
+       */
     ]
   }
 ]
